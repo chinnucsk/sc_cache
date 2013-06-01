@@ -1,7 +1,6 @@
 -module(simple_cache).
 
--export([
-		 insert/2,
+-export([insert/2,
 		 delete/1,
 		 lookup/1
 		]).
