@@ -10,5 +10,5 @@
 				  stdlib
 				  ]},
   {registered, [sc_sup]},
-  {mod, {simple_cache, []}}
+  {mod, {sc_app, []}}
 ]}.
