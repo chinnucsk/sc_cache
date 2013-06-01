@@ -1,8 +1,8 @@
 -module(simple_cache).
 
 -export([insert/2,
-		 delete/1,
-		 lookup/1
+		delete/1,
+		lookup/1
 		]).
 
 insert(Key, Value) ->
