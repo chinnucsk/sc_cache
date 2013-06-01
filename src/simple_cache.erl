@@ -18,7 +18,7 @@ insert(Key, Value) ->
 lookup(Key) ->
 	try
 		{ok, Pid} = sc_store:lookup(Key),
-	    sc_element:fetch(Pid)
+		sc_element:fetch(Pid)
 	catch
 		_Class:_Exception ->
 			 {error, not_found}
@@ -31,4 +31,3 @@ delete(Key) ->
 		{error, not_found} ->
 			ok
 	end.
-	
