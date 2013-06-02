@@ -3,11 +3,12 @@
 %%% Author  :  <xeno@localhost>
 %%% Description : 
 %%%
-%%% Created :  2 Jun 2013 by  <xeno@localhost>
+%%% Created :  1 Jun 2013 by  <xeno@localhost>
 %%%-------------------------------------------------------------------
--module(sc_sup).
+-module(sc_element_sup).
 
 -behaviour(supervisor).
+
 %%--------------------------------------------------------------------
 %% Include files
 %%--------------------------------------------------------------------
@@ -16,7 +17,8 @@
 %% External exports
 %%--------------------------------------------------------------------
 -export([
-		 start_link/0
+		 start_link/0,
+		 start_child/2
         ]).
 
 %%--------------------------------------------------------------------
@@ -45,6 +47,9 @@
 start_link() ->
 	supervisor:start_link({local, ?SERVER}, ?MODULE, []).
 
+start_child(Value, LeaseTime) ->
+	supervisor:start_child(?SERVER, [Value, LeaseTime]).
+
 %%====================================================================
 %% Server functions
 %%====================================================================
@@ -55,14 +60,13 @@ start_link() ->
 %%          {error, Reason}   
 %%--------------------------------------------------------------------
 init([]) ->
-	ElementSup = {sc_element_sup, {sc_element_sup,start_link, []},
-				  permanent, 2000, supervisor, [sc_element]},
-	EventSup = {sc_event, {sc_event, start_link, []},
-				permanent, 2000, worker, [sc_event]},
-	Children = [ElementSup, EventSup],
-	RestartStrategy = {one_for_one, 4, 3600},
-	{ok,{RestartStrategy, Children}}.
+	Element = {sc_element, {sc_element, start_link, []},
+			   temporary, brutal_kill, worker, [sc_element]},
+	Children = [Element],
+	RestartStrategy = {simple_one_for_one, 0, 1},
+	{ok, {RestartStrategy, Children}}.
 
 %%====================================================================
 %% Internal functions
 %%====================================================================
+
