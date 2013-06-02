@@ -44,7 +44,7 @@ create(Value) ->
 	create(Value, ?DEFAULT_LEASE_TIME).
 
 create(Value, Timeout) ->
-	sc_sup:start_child(Value, Timeout).
+	sc_element_sup:start_child(Value, Timeout).
 
 fetch(Pid) ->
 	gen_server:call(Pid, fetch).
