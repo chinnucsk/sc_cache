@@ -103,6 +103,7 @@ handle_cast({replace, Value}, State) ->
 	   start_time = StartTime} = State,
     TimeLeft = time_left(StartTime, LeaseTime),
     {noreply, State#state{value = Value}, TimeLeft};
+
 handle_cast(delete, State) ->
     {stop, normal, State}.
 
