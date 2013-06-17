@@ -21,9 +21,7 @@
 %%--------------------------------------------------------------------
 %% Internal exports
 %%--------------------------------------------------------------------
--export([
-	 init/1
-        ]).
+-export([init/1]).
 
 %%--------------------------------------------------------------------
 %% Macros
@@ -46,6 +44,9 @@ start_link() ->
 
 start_child(Value, LeaseTime) ->
     supervisor:start_child(?SERVER, [Value, LeaseTime]).
+
+list_children() ->
+    supervisor:which_children(?SERVER).
 
 %%====================================================================
 %% Server functions
