@@ -1,5 +1,5 @@
 all:
-	erlc src/*.erl; mv *.beam ebin/
+	rebar compile
 
 run:
 	erl -pa ebin/

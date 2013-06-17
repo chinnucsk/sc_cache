@@ -1,4 +1,4 @@
-{application,sc,
+{application,simple_cache,
              [{description,"A simple cache."},
               {vsn,"1"},
               {registered,[]},
