@@ -1,6 +1,6 @@
 -module(simple_cache).
 
--export([insert/2, delete/1, lookup/1]).
+-export([insert/2, delete/1, lookup/1, drop/0]).
 
 insert(Key, Value) ->
 	case sc_store:lookup(Key) of
@@ -31,3 +31,8 @@ delete(Key) ->
 		{error, not_found} ->
 			ok
 	end.
+
+drop() ->
+    Children = sc_element_sup:list_children(),
+    [gen_server:cast(Child, delete) || {_, Child, worker, _List} <- Children],
+    ok.
