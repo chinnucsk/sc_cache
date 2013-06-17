@@ -31,21 +31,21 @@
 %% Description: Starts the server
 %%--------------------------------------------------------------------
 start_link() ->
-	gen_event:start_link({local, ?SERVER}). 
+    gen_event:start_link({local, ?SERVER}). 
 
 %%--------------------------------------------------------------------
 %% Function: add_handler/0
 %% Description: Adds an event handler
 %%--------------------------------------------------------------------
 add_handler() ->
-	sc_event:add_handler(?MODULE, []).
+    sc_event:add_handler(?MODULE, []).
 
 %%--------------------------------------------------------------------
 %% Function: delete_handler/0
 %% Description: Deletes an event handler
 %%--------------------------------------------------------------------
 delete_handler() ->
-	sc_event:delete_handler(?MODULE, []).
+    sc_event:delete_handler(?MODULE, []).
 
 %%====================================================================
 %% Server functions
@@ -56,7 +56,7 @@ delete_handler() ->
 %%          Other
 %%--------------------------------------------------------------------
 init([]) ->
-	{ok, #state{}}.
+    {ok, #state{}}.
 
 %%--------------------------------------------------------------------
 %% Func: handle_event/2
@@ -65,17 +65,17 @@ init([]) ->
 %%          remove_handler                              
 %%--------------------------------------------------------------------
 handle_event({create, {Key, Value}}, State) ->
-	error_logger:info_msg("create(~w, ~w)~n", [Key, Value]),
-	{ok, State};
+    error_logger:info_msg("create(~w, ~w)~n", [Key, Value]),
+    {ok, State};
 handle_event({replace, {Key, Value}}, State) ->
-	error_logger:info_msg("replace(~w, ~w)~n", [Key, Value]),
-	{ok, State};
+    error_logger:info_msg("replace(~w, ~w)~n", [Key, Value]),
+    {ok, State};
 handle_event({lookup, Key}, State) ->
-	error_logger:info_msg("lookup(~w)~n", [Key]),
-	{ok, State};
+    error_logger:info_msg("lookup(~w)~n", [Key]),
+    {ok, State};
 handle_event({delete, Key}, State) ->
-	error_logger:info_msg("delete(~w)~n", [Key]),
-	{ok, State}.
+    error_logger:info_msg("delete(~w)~n", [Key]),
+    {ok, State}.
 
 
 %%--------------------------------------------------------------------
@@ -85,8 +85,8 @@ handle_event({delete, Key}, State) ->
 %%          {remove_handler, Reply}                            
 %%--------------------------------------------------------------------
 handle_call(Request, State) ->
-	Reply = ok,
-	{ok, Reply, State}.
+    Reply = ok,
+    {ok, Reply, State}.
 
 %%--------------------------------------------------------------------
 %% Func: handle_info/2
@@ -95,7 +95,7 @@ handle_call(Request, State) ->
 %%          remove_handler                              
 %%--------------------------------------------------------------------
 handle_info(Info, State) ->
-	{ok, State}.
+    {ok, State}.
 
 %%--------------------------------------------------------------------
 %% Func: terminate/2
@@ -103,7 +103,7 @@ handle_info(Info, State) ->
 %% Returns: any
 %%--------------------------------------------------------------------
 terminate(Reason, State) ->
-	ok.
+    ok.
 
 %%--------------------------------------------------------------------
 %% Func: code_change/3
@@ -111,7 +111,7 @@ terminate(Reason, State) ->
 %% Returns: {ok, NewState}
 %%--------------------------------------------------------------------
 code_change(OldVsn, State, Extra) ->
-	{ok, State}.
+    {ok, State}.
 
 %%--------------------------------------------------------------------
 %%% Internal functions
