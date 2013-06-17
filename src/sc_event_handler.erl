@@ -84,7 +84,7 @@ handle_event({delete, Key}, State) ->
 %%          {swap_handler, Reply, Args1, State1, Mod2, Args2} |
 %%          {remove_handler, Reply}                            
 %%--------------------------------------------------------------------
-handle_call(Request, State) ->
+handle_call(_Request, State) ->
     Reply = ok,
     {ok, Reply, State}.
 
@@ -94,7 +94,7 @@ handle_call(Request, State) ->
 %%          {swap_handler, Args1, State1, Mod2, Args2} |
 %%          remove_handler                              
 %%--------------------------------------------------------------------
-handle_info(Info, State) ->
+handle_info(_Info, State) ->
     {ok, State}.
 
 %%--------------------------------------------------------------------
@@ -102,7 +102,7 @@ handle_info(Info, State) ->
 %% Purpose: Shutdown the server
 %% Returns: any
 %%--------------------------------------------------------------------
-terminate(Reason, State) ->
+terminate(_Reason, _State) ->
     ok.
 
 %%--------------------------------------------------------------------
@@ -110,7 +110,7 @@ terminate(Reason, State) ->
 %% Purpose: Convert process state when code is changed
 %% Returns: {ok, NewState}
 %%--------------------------------------------------------------------
-code_change(OldVsn, State, Extra) ->
+code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
 %%--------------------------------------------------------------------
