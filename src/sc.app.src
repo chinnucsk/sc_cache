@@ -1,0 +1,14 @@
+%% -*- mode: Erlang;-*-
+{application, sc,
+ [
+  {description, "A simple cache."},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+		  kernel,
+		  stdlib
+		 ]},
+  {mod, { sc_app, []}},
+  {env, []}
+ ]
+}.
