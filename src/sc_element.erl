@@ -33,40 +33,50 @@
 %%====================================================================
 %% External functions
 %%====================================================================
-%%--------------------------------------------------------------------
-%% Function: start_link/0
-%% Description: Starts the server
-%%--------------------------------------------------------------------
+%% @doc
+%% start_link/2 will start a new gen_server off which is holding the
+%% specific value we're passed.
+%% @spec start_link(Value::term(), LeaseTime::integer()) -> ok
 start_link(Value, LeaseTime) ->
     gen_server:start_link(?MODULE, [Value, LeaseTime], []).
 
+%% @doc
+%% create/1 will create a new element in the cache.
+%% @spec create(Value::term()) -> ok
 create(Value) ->
     create(Value, ?DEFAULT_LEASE_TIME).
 
+%% @doc
+%% create/2 will create a new element in the cache with the required
+%% timeout.
+%% @spec create(Value::term(), Timeout::integer()) -> ok
 create(Value, Timeout) ->
     sc_element_sup:start_child(Value, Timeout).
 
+%% @doc
+%% fetch/1 will return the value associated with the Pid.
+%% @spec fetch(Pid::pid()) -> {ok, term()} | {error, Reason::term()}
 fetch(Pid) ->
     gen_server:call(Pid, fetch).
 
+%% @doc
+%% delete/1 will remove an element from the cache.
+%% @spec delete(Pid::pid()) -> ok
 delete(Pid) ->
     gen_server:cast(Pid, delete).
 
+%% @doc
+%% replace/2 will entirely replace an element in the cache with a new
+%% value.
+%% @spec replace(Pid::pid(), Value::term()) -> ok | {error, Reason}
 replace(Pid, Value) ->
     gen_server:cast(Pid, {replace, Value}).
 
-%%====================================================================
-%% Server functions
-%%====================================================================
+%% @doc
+%% init/1 initializes the new element handler to the associated value
+%% with the specified timeout.
 
-%%--------------------------------------------------------------------
-%% Function: init/1
-%% Description: Initiates the server
-%% Returns: {ok, State}          |
-%%          {ok, State, Timeout} |
-%%          ignore               |
-%%          {stop, Reason}
-%%--------------------------------------------------------------------
+%% @spec init([Value::term(), LeaseTime::integer()]) -> pid()
 init([Value, LeaseTime]) ->
     Now = calendar:local_time(),
     StartTime = calendar:datetime_to_gregorian_seconds(Now),
@@ -75,29 +85,13 @@ init([Value, LeaseTime]) ->
 		start_time = StartTime},
      time_left(StartTime, LeaseTime)}.
 
-%%--------------------------------------------------------------------
-%% Function: handle_call/3
-%% Description: Handling call messages
-%% Returns: {reply, Reply, State}          |
-%%          {reply, Reply, State, Timeout} |
-%%          {noreply, State}               |
-%%          {noreply, State, Timeout}      |
-%%          {stop, Reason, Reply, State}   | (terminate/2 is called)
-%%          {stop, Reason, State}            (terminate/2 is called)
-%%--------------------------------------------------------------------
 handle_call(fetch, _From, State) ->
     #state{value = Value,
 	   lease_time = LeaseTime,
 	   start_time = StartTime} = State,
     TimeLeft = time_left(StartTime, LeaseTime),
     {reply, {ok, Value}, State, TimeLeft}.
-%%--------------------------------------------------------------------
-%% Function: handle_cast/2
-%% Description: Handling cast messages
-%% Returns: {noreply, State}          |
-%%          {noreply, State, Timeout} |
-%%          {stop, Reason, State}            (terminate/2 is called)
-%%--------------------------------------------------------------------
+
 handle_cast({replace, Value}, State) ->
     #state{lease_time = LeaseTime,
 	   start_time = StartTime} = State,
@@ -107,36 +101,16 @@ handle_cast({replace, Value}, State) ->
 handle_cast(delete, State) ->
     {stop, normal, State}.
 
-%%--------------------------------------------------------------------
-%% Function: handle_info/2
-%% Description: Handling all non call/cast messages
-%% Returns: {noreply, State}          |
-%%          {noreply, State, Timeout} |
-%%          {stop, Reason, State}            (terminate/2 is called)
-%%--------------------------------------------------------------------
 handle_info(timeout, State) ->
     {stop, normal, State}.
 
-%%--------------------------------------------------------------------
-%% Function: terminate/2
-%% Description: Shutdown the server
-%% Returns: any (ignored by gen_server)
-%%--------------------------------------------------------------------
+
 terminate(_Reason, _State) ->
     sc_store:delete(self()),
     ok.
 
-%%--------------------------------------------------------------------
-%% Func: code_change/3
-%% Purpose: Convert process state when code is changed
-%% Returns: {ok, NewState}
-%%--------------------------------------------------------------------
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
-
-%%--------------------------------------------------------------------
-%%% Internal functions
-%%--------------------------------------------------------------------
 
 time_left(_StartTime, infinity) ->
     infinity;
